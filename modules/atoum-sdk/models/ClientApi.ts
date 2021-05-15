@@ -17,9 +17,8 @@ class ClientApi extends Authenticator {
   private readonly authorizeUrl: string;
 
   constructor(
-    clientId: string,
+    clientId: string = 'thot-sgb',
     {
-      clientSecret = '',
       clientRootUrl = CLIENT_ROUTES.ROOT_URL,
       clientLoginPath = CLIENT_ROUTES.LOGIN_PATH,
       language = 'fr',
@@ -28,7 +27,7 @@ class ClientApi extends Authenticator {
       refreshTokenPath = API_ROUTES.REFRESH_TOKEN_PATH,
     } = {},
   ) {
-    super(clientId, clientSecret, apiRootUrl + refreshTokenPath);
+    super(clientId, apiRootUrl + refreshTokenPath);
 
     this.clientRootUrl = clientRootUrl;
     this.clientLoginUrl = clientRootUrl + clientLoginPath;
@@ -40,7 +39,7 @@ class ClientApi extends Authenticator {
   }
 
   public login(credentials: RequestBody) {
-    const authRequest = this.createPostRequest(this.authorizeUrl);
+    const authRequest = new Request(this.authorizeUrl, 'POST');
 
     return authRequest
       .setBodyParams(credentials)

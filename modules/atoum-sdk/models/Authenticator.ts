@@ -5,8 +5,6 @@ import { STORAGE_KEYS } from '../constants';
 class Authenticator {
   private readonly clientId: string;
 
-  private readonly clientSecret: string;
-
   protected jwtToken: string;
 
   protected refreshToken: string;
@@ -15,9 +13,8 @@ class Authenticator {
 
   private refreshTokenUrl: string;
 
-  constructor(clientId: string, clientSecret: string, refreshTokenUrl: string) {
+  constructor(clientId: string, refreshTokenUrl: string) {
     this.clientId = clientId;
-    this.clientSecret = clientSecret;
     this.refreshTokenUrl = refreshTokenUrl;
     this.jwtToken = this.getStorageItem(STORAGE_KEYS.JWT_TOKEN) || null;
     this.refreshToken = this.getStorageItem(STORAGE_KEYS.REFRESH_TOKEN) || null;
