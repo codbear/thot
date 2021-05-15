@@ -1,8 +1,8 @@
 import { FormEvent } from 'react';
 import { Button, Card, CardActions, CardContent, makeStyles } from '@material-ui/core';
 import { FormikBag, FormikValues, withFormik } from 'formik';
-import { FormikTextField } from '../../../form';
-import { isEmail, isRequired } from '../../../form/services';
+import { FormikTextField, isEmail, isRequired } from '../../../form';
+import { ClientApi } from '../../../atoum-sdk';
 
 type LoginFormProps = {
   handleSubmit:
@@ -69,7 +69,14 @@ export default withFormik({
     email: '',
     password: '',
   }),
-  handleSubmit: (values, formikBag) => {
-    console.log({ values, formikBag });
+  handleSubmit: (values) => {
+    const credentials = {
+      username: values.email,
+      password: values.password,
+    };
+
+    const request = new ClientApi();
+    const response = request.login(credentials);
+    console.log(response);
   },
 })(LoginForm);
