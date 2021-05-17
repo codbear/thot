@@ -1,6 +1,5 @@
 import { HttpMethod, RequestBody } from '../types';
-
-import { API_ROUTES, CLIENT_ROUTES } from '../constants';
+import { API_ROUTES, CLIENT_ID, CLIENT_ROUTES } from '../constants';
 
 import Request from './Request';
 import Authenticator from './Authenticator';
@@ -17,7 +16,7 @@ class ClientApi extends Authenticator {
   private readonly authorizeUrl: string;
 
   constructor(
-    clientId: string = 'thot-sgb',
+    clientId: string = CLIENT_ID,
     {
       clientRootUrl = CLIENT_ROUTES.ROOT_URL,
       clientLoginPath = CLIENT_ROUTES.LOGIN_PATH,
