@@ -1,2 +1,2 @@
-// eslint-disable-next-line import/prefer-default-export
 export { LoginScreen } from './screens';
+export { RegisterScreen } from './screens';
