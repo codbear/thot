@@ -22,7 +22,8 @@ export default function Index({ session }) {
 
   return (
     <>
-      <p>Name: {user.name} </p>
+      <p>First name: {user.firstName} </p>
+      <p>Last name: {user.lastName} </p>
       <p>Email: {user.email} </p>
       <p>id: {user.id} </p>
       <button onClick={() => signOut()}>Sign out</button>
