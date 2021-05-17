@@ -10,12 +10,14 @@
         "node": true
     },
     "extends": [
-        "airbnb",
-        "plugin:prettier/recommended",
-        "plugin:react/recommended"
+        "plugin:react/recommended",
+        "airbnb-typescript",
+        "airbnb/hooks",
+        "plugin:prettier/recommended"
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
+        "project": "./tsconfig.json",
         "ecmaFeatures": {
             "jsx": true
         },
@@ -37,7 +39,6 @@
         "jsx-a11y/anchor-is-valid": "off",
         "prettier/prettier": [
             "error", {}, { "usePrettierrc": true }
-        ],
-        "import/extensions": "off"
+        ]
     }
 }

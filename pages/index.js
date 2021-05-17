@@ -1,15 +1,31 @@
-import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
+import { getSession, signOut } from 'next-auth/client';
 
-export default function Index() {
+export const getServerSideProps = async (context) => {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: process.env.NEXT_PUBLIC_CLIENT_LOGIN_PATH,
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: { session },
+  };
+};
+
+export default function Index({ session }) {
+  const { user } = session;
+
   return (
-    <Container maxWidth="sm">
-      <Box sx={{ my: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Thot
-        </Typography>
-      </Box>
-    </Container>
+    <>
+      <p>Name: {user.name} </p>
+      <p>Email: {user.email} </p>
+      <p>id: {user.id} </p>
+      <button onClick={() => signOut()}>Sign out</button>
+    </>
   );
 }

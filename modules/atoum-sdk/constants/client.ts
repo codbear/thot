@@ -1,0 +1,9 @@
+export const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
+
+const CLIENT_ROUTES = {
+  ROOT_URL: process.env.NEXT_PUBLIC_CLIENT_ROOT_URL,
+  LOGIN_PATH: process.env.NEXT_PUBLIC_CLIENT_LOGIN_PATH,
+  REGISTER_PATH: process.env.NEXT_PUBLIC_CLIENT_REGISTER_PATH,
+};
+
+export default CLIENT_ROUTES;
