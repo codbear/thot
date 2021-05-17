@@ -13,6 +13,7 @@
     "@material-ui/icons": "^4.11.*",
     "@material-ui/lab": "4.0.0-alpha.58",
     "@material-ui/styles": "4.11.*",
+    "axios": "^0.21.1",
     "btoa": "^1.2.1",
     "classnames": "^2.2.*",
     "formik": "^2.2.*",
@@ -20,6 +21,7 @@
     "linkheader-parser": "^0.1.2",
     "local-storage-fallback": "^4.1.2",
     "next": "10.2.*",
+    "next-auth": "^3.23.0",
     "react": "17.0.*",
     "react-dom": "17.0.*"
   },
