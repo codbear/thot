@@ -15,16 +15,16 @@ export const getServerSideProps = async (context) => {
   return {
     props: { session },
   };
-}
+};
 
 export default function Index({ session }) {
   const { user } = session;
 
   return (
     <>
-      <p>Name: { user.name } </p>
-      <p>Email: { user.email } </p>
-      <p>id: { user.id } </p>
+      <p>Name: {user.name} </p>
+      <p>Email: {user.email} </p>
+      <p>id: {user.id} </p>
       <button onClick={() => signOut()}>Sign out</button>
     </>
   );
