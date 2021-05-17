@@ -1,8 +1,10 @@
 import { FormEvent } from 'react';
-import { Button, Card, CardActions, CardContent, makeStyles } from '@material-ui/core';
+import { signIn } from 'next-auth/client';
 import { FormikBag, FormikValues, withFormik } from 'formik';
+
+import { Button, Card, CardActions, CardContent, makeStyles } from '@material-ui/core';
+
 import { FormikTextField, isEmail, isRequired } from '../../../form';
-import { ClientApi } from '../../../atoum-sdk';
 
 type LoginFormProps = {
   handleSubmit:
@@ -70,13 +72,10 @@ export default withFormik({
     password: '',
   }),
   handleSubmit: (values) => {
-    const credentials = {
+    signIn('credentials', {
       username: values.email,
       password: values.password,
-    };
-
-    const request = new ClientApi();
-    const response = request.login(credentials);
-    console.log(response);
+      callbackUrl: window.location.origin,
+    });
   },
 })(LoginForm);
