@@ -1,4 +1,5 @@
-import { getSession, signOut } from 'next-auth/client';
+import { getSession } from 'next-auth/client';
+import { DefaultLayout } from '../modules/layout';
 
 export const getServerSideProps = async (context) => {
   const session = await getSession(context);
@@ -21,12 +22,6 @@ export default function Index({ session }) {
   const { user } = session;
 
   return (
-    <>
-      <p>First name: {user.firstName} </p>
-      <p>Last name: {user.lastName} </p>
-      <p>Email: {user.email} </p>
-      <p>id: {user.id} </p>
-      <button onClick={() => signOut()}>Sign out</button>
-    </>
+    <DefaultLayout />
   );
 }
