@@ -1,47 +1,18 @@
 import { FormEvent, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/client';
 import { FormikBag, FormikValues, withFormik } from 'formik';
 
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Divider,
-  makeStyles,
-  Typography,
-} from '@material-ui/core';
-
-import { useRouter } from 'next/router';
 import { FormikTextField, isEmail, isRequired } from '../../../form';
-import { Alert, ALERT_VARIANT } from '../../../ui';
 
-type LoginFormProps = {
+import { AuthForm } from '../AuthForm';
+
+interface LoginFormProps {
   handleSubmit:
     | ((event: FormEvent<HTMLFormElement>) => void)
     | ((values: FormikValues, formikBag: FormikBag<any, any>) => void | Promise<any>);
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
-};
-
-const useStyles = makeStyles(({ spacing }) => ({
-  root: {
-    width: '100%',
-    maxWidth: 600,
-  },
-  cardContent: {
-    padding: spacing(5),
-  },
-  cardTitle: {
-    textAlign: 'center',
-    marginBottom: spacing(5),
-  },
-  fieldsContainer: {
-    marginTop: spacing(5),
-  },
-  marginBottom: {
-    marginBottom: spacing(5),
-  },
-}));
+}
 
 const fields = {
   email: {
@@ -74,7 +45,6 @@ const getErrorMessage = (error) => {
 };
 
 const LoginForm = ({ handleSubmit, setFieldValue }: LoginFormProps) => {
-  const classes = useStyles();
   const router = useRouter();
   const [formError, setFormError] = useState(null);
 
@@ -88,26 +58,10 @@ const LoginForm = ({ handleSubmit, setFieldValue }: LoginFormProps) => {
   }, [router, setFieldValue]);
 
   return (
-    <Card className={classes.root}>
-      <form noValidate onSubmit={handleSubmit as (event: FormEvent<HTMLFormElement>) => void}>
-        <CardContent className={classes.cardContent}>
-          <Typography variant="h4" component="h1" className={classes.cardTitle}>
-            Connexion
-          </Typography>
-          <Divider />
-          <div className={classes.fieldsContainer}>
-            <FormikTextField key={fields.email.name} {...fields.email} />
-            <FormikTextField key={fields.password.name} {...fields.password} />
-          </div>
-          {formError && <Alert variant={ALERT_VARIANT.ERROR} content={formError} />}
-        </CardContent>
-        <CardActions>
-          <Button type="submit" variant="contained" color="primary" fullWidth>
-            Se connecter
-          </Button>
-        </CardActions>
-      </form>
-    </Card>
+    <AuthForm variant="login" handleSubmit={handleSubmit} error={formError}>
+      <FormikTextField key={fields.email.name} {...fields.email} />
+      <FormikTextField key={fields.password.name} {...fields.password} />
+    </AuthForm>
   );
 };
 
@@ -117,9 +71,11 @@ export default withFormik({
     password: '',
   }),
   handleSubmit: (values) => {
+    const { email: username, password } = values;
+
     signIn('credentials', {
-      username: values.email,
-      password: values.password,
+      username,
+      password,
       callbackUrl: window.location.origin,
     });
   },
