@@ -74,7 +74,7 @@ const AuthForm = ({ variant, handleSubmit, error, children }: AuthFormProps) => 
             color="primary"
             className={classes.submitButton}
           >
-            {variant === 'login' ? 'Se connecter' : 'S&#39;inscrire'}
+            {variant === 'login' ? 'Se connecter' : "S'inscrire"}
           </Button>
           {variant === 'login' ? (
             <Typography variant="body2">
