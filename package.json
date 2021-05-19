@@ -1,6 +1,6 @@
 {
   "name": "thot",
-  "version": "2.2.0-alpha",
+  "version": "2.2.1-alpha",
   "private": true,
   "scripts": {
     "dev": "next dev",
