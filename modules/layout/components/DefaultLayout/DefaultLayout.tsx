@@ -108,7 +108,6 @@ const DefaultLayout = ({ children }: DefaultLayoutProps) => {
           <MainNav />
         </Nav>
         <Content>{children}</Content>
-        <Footer />
       </div>
     </LayoutContext.Provider>
   );
