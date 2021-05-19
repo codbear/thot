@@ -81,7 +81,7 @@ export default withFormik({
     lastName: '',
     password: '',
   }),
-  handleSubmit: (values) => {
+  handleSubmit: (values, { setFieldError }) => {
     const { email: username, firstName, lastName, password } = values;
 
     const authUrl =
@@ -104,6 +104,14 @@ export default withFormik({
           password,
           callbackUrl: window.location.origin,
         });
+      })
+      .catch((error) => {
+        const { status, data } = error.response;
+        const isEmailAlreadyInUse = status === 409 && data === 'Email already exists';
+
+        if (isEmailAlreadyInUse) {
+          setFieldError('email', 'Cette adresse email est déjà utilisée.');
+        }
       });
   },
 })(LoginForm);
