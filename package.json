@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ./ --ext js,jsx,ts,tsx"
+    "lint": "eslint ./ --ext js,jsx,ts,tsx",
+    "env": "vercel env pull"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.*",
