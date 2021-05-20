@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core';
 
 import { useLayoutConfig } from '../../services';
 
-interface DefaultContentProps {
+interface DefaultFooterProps {
   className?: string;
 }
 
@@ -12,10 +12,13 @@ const defaultProps = {
   className: null,
 };
 
-const useStyles = makeStyles(({ transitions, spacing }) => ({
+const useStyles = makeStyles(({ breakpoints, palette, spacing, transitions }) => ({
   root: {
+    borderTop: `1px solid ${palette.divider}`,
     padding: spacing(2),
-    flexGrow: 1,
+    [breakpoints.up('sm')]: {
+      padding: spacing(3),
+    },
     transition: transitions.create(['margin'], {
       easing: transitions.easing.sharp,
       duration: transitions.duration.leavingScreen,
@@ -23,7 +26,7 @@ const useStyles = makeStyles(({ transitions, spacing }) => ({
   },
 }));
 
-const DefaultContent = ({ className, ...props }: DefaultContentProps) => {
+const Footer = ({ className, ...props }: DefaultFooterProps) => {
   const classes = useStyles();
   const layoutConfig = useLayoutConfig();
 
@@ -33,9 +36,9 @@ const DefaultContent = ({ className, ...props }: DefaultContentProps) => {
     isNavCollapsible,
     isNavCollapsed,
     collapsedNavWidth,
+    shouldShrinkFooter,
     isNavOpen,
     navAnchor,
-    shouldSqueezeContent,
   } = layoutConfig;
 
   const navVariantToMargin = {
@@ -43,22 +46,20 @@ const DefaultContent = ({ className, ...props }: DefaultContentProps) => {
     permanent: isNavCollapsible && isNavCollapsed ? collapsedNavWidth : navWidth,
   };
 
-  const marginLeft = navAnchor === 'left' ? navVariantToMargin[navVariant] : 0;
-
-  const width = navVariant === 'persistent' && isNavOpen && !shouldSqueezeContent ? '100%' : 'auto';
+  const marginLeft =
+    navAnchor === 'left' || shouldShrinkFooter ? navVariantToMargin[navVariant] : 0;
 
   return (
-    <main
+    <footer
       {...props}
       className={cx(className, classes.root)}
       style={{
         marginLeft,
-        width,
       }}
     />
   );
 };
 
-DefaultContent.defaultProps = defaultProps;
+Footer.defaultProps = defaultProps;
 
-export default DefaultContent;
+export default Footer;

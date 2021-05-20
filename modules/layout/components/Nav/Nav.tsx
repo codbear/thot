@@ -1,25 +1,26 @@
-import { ReactNode } from 'react';
 import cx from 'classnames';
 
-import { makeStyles, Drawer, Button, IconButton, Grow } from '@material-ui/core';
+import { makeStyles, Drawer, Button, IconButton, Grow, List, Divider } from '@material-ui/core';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
+import SearchOutlinedIcon from '@material-ui/icons/SearchOutlined';
+import PeopleAltOutlinedIcon from '@material-ui/icons/PeopleAltOutlined';
+import BookmarksOutlinedIcon from '@material-ui/icons/BookmarksOutlined';
+import StoreOutlinedIcon from '@material-ui/icons/StoreOutlined';
+import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
+import AccountBoxOutlinedIcon from '@material-ui/icons/AccountBoxOutlined';
 
 import { useLayoutConfig } from '../../services';
 
+import { NavItem } from '../NavItem';
+
 interface DefaultNavProps {
   className?: string;
-  header?: ReactNode;
-  children?: ReactNode;
-  collapsedIcon?: {
-    inactive: ReactNode;
-    active: ReactNode;
-  };
 }
 
 const defaultProps = {
   className: '',
-  header: null,
-  collapsedIcon: null,
-  children: null,
 };
 
 const useStyles = makeStyles(
@@ -66,11 +67,12 @@ const useStyles = makeStyles(
   }),
 );
 
-const DefaultNav = ({ className, header, children, collapsedIcon, ...props }: DefaultNavProps) => {
+const Nav = ({ className, ...props }: DefaultNavProps) => {
   const classes = useStyles();
   const layoutConfig = useLayoutConfig();
 
   const {
+    hasNav,
     navAnchor,
     navVariant,
     navWidth,
@@ -85,7 +87,12 @@ const DefaultNav = ({ className, header, children, collapsedIcon, ...props }: De
 
   const width = isNavCollapsible && isNavCollapsed ? collapsedNavWidth : navWidth;
 
-  const shouldRenderButton = isNavCollapsible && collapsedIcon;
+  const shouldRenderCollapseButton = hasNav && isNavCollapsible;
+
+  const collapsedIcon = {
+    inactive: <ChevronLeftIcon />,
+    active: <ChevronRightIcon />,
+  };
 
   const handleClose = () => {
     setIsNavOpen(false);
@@ -107,9 +114,26 @@ const DefaultNav = ({ className, header, children, collapsedIcon, ...props }: De
       >
         <div className={classes.container} style={{ width }}>
           {isHeaderClipped && <div className={classes.offset} />}
-          {header}
-          <div className={classes.content}>{children}</div>
-          {shouldRenderButton && (
+
+          <div className={classes.content}>
+            <List aria-label="Bibliothèque">
+              <NavItem primary="Bibliothèque" to="/" icon={<HomeOutlinedIcon />} />
+              <NavItem primary="Recherche" to="/search" icon={<SearchOutlinedIcon />} />
+            </List>
+            <Divider />
+            <List aria-label="Métadonnées">
+              <NavItem primary="Auteurs" to="/metas/authors" icon={<PeopleAltOutlinedIcon />} />
+              <NavItem primary="Genres" to="/metas/genres" icon={<BookmarksOutlinedIcon />} />
+              <NavItem primary="Éditeur" to="/metas/publishers" icon={<StoreOutlinedIcon />} />
+            </List>
+            <Divider />
+            <List aria-label="Paramètres">
+              <NavItem primary="Paramètres" to="/my/settings" icon={<SettingsOutlinedIcon />} />
+              <NavItem primary="Mon compte" to="/my/account" icon={<AccountBoxOutlinedIcon />} />
+            </List>
+          </div>
+
+          {shouldRenderCollapseButton && (
             <Button className={classes.collapseButton} fullWidth onClick={handleCollapse}>
               {isNavCollapsed
                 ? collapsedIcon.active
@@ -131,6 +155,6 @@ const DefaultNav = ({ className, header, children, collapsedIcon, ...props }: De
   );
 };
 
-DefaultNav.defaultProps = defaultProps;
+Nav.defaultProps = defaultProps;
 
-export default DefaultNav;
+export default Nav;

@@ -1,16 +1,20 @@
 import { ReactElement, useState } from 'react';
 
-import { makeStyles, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 
 import { useWidth } from '../../../ui';
 
-import { LAYOUT_CONFIG, LayoutConfig } from '../../constants';
+import { LayoutConfig } from '../../constants';
 import { LayoutContext } from '../../services';
-import Header from '../DefaultLayout/DefaultHeader';
-import Content from '../DefaultLayout/DefaultContent';
+
+import Header from '../Header/Header';
+import Nav from '../Nav/Nav';
+import Content from '../Content/Content';
+import Footer from '../Footer/Footer';
 
 interface DefaultLayoutProps {
   children?: ReactElement;
+  layoutConfig: LayoutConfig;
 }
 
 const defaultProps = {
@@ -23,10 +27,6 @@ const useStyles = makeStyles({
     flexDirection: 'column',
     minHeight: '100vh',
   },
-  title: {
-    textTransform: 'uppercase',
-    flexGrow: 1,
-  },
 });
 
 export const getValueFromScreenWidth = (property, screenWidth) => {
@@ -37,13 +37,16 @@ export const getValueFromScreenWidth = (property, screenWidth) => {
   return property[screenWidth] || property.default;
 };
 
-const AnonymousLayout = ({ children }: DefaultLayoutProps) => {
+const Layout = ({ children, layoutConfig }: DefaultLayoutProps) => {
   const classes = useStyles();
   const screenWidth = useWidth();
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
 
   const {
+    hasHeader,
+    hasNav,
+    hasFooter,
     navAnchor,
     navVariant,
     navWidth,
@@ -53,9 +56,10 @@ const AnonymousLayout = ({ children }: DefaultLayoutProps) => {
     headerPosition,
     shouldSqueezeContent,
     shouldShrinkFooter,
-  } = LAYOUT_CONFIG;
+  } = layoutConfig;
 
   const value: LayoutConfig = {
+    ...layoutConfig,
     navAnchor: getValueFromScreenWidth(navAnchor, screenWidth),
     navVariant: getValueFromScreenWidth(navVariant, screenWidth),
     navWidth: getValueFromScreenWidth(navWidth, screenWidth),
@@ -74,17 +78,18 @@ const AnonymousLayout = ({ children }: DefaultLayoutProps) => {
   return (
     <LayoutContext.Provider value={value}>
       <div className={classes.root}>
-        <Header>
-          <Typography variant="h6" component="h1" noWrap className={classes.title}>
-            Thot
-          </Typography>
-        </Header>
+        {hasHeader && <Header />}
+
+        {hasNav && <Nav />}
+
         <Content>{children}</Content>
+
+        {hasFooter && <Footer />}
       </div>
     </LayoutContext.Provider>
   );
 };
 
-AnonymousLayout.defaultProps = defaultProps;
+Layout.defaultProps = defaultProps;
 
-export default AnonymousLayout;
+export default Layout;

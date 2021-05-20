@@ -1,26 +1,28 @@
 import { ReactNode } from 'react';
+import { signOut } from 'next-auth/client';
 import cx from 'classnames';
 
-import { makeStyles, Toolbar, AppBar, IconButton } from '@material-ui/core';
+import { makeStyles, Toolbar, AppBar, IconButton, Typography } from '@material-ui/core';
+import SignOutIcon from '@material-ui/icons/PowerSettingsNew';
+import MenuIcon from '@material-ui/icons/Menu';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
-import { LayoutConfig } from '../../constants';
 import { useLayoutConfig } from '../../services';
+import { LayoutConfig } from '../../constants';
 
 interface DefaultHeaderProps {
   className?: string;
   children?: ReactNode;
   toolbarProps?: Record<string, any>;
-  menuIcon?: { inactive: ReactNode; active: ReactNode };
 }
 
 const defaultProps = {
   className: '',
   toolbarProps: {},
-  menuIcon: null,
   children: null,
 };
 
-const useStyles = makeStyles(({ transitions, zIndex }) => ({
+const useStyles = makeStyles(({ transitions, zIndex, spacing }) => ({
   root: {
     zIndex: zIndex.appBar,
     transition: transitions.create(['margin', 'width'], {
@@ -34,6 +36,13 @@ const useStyles = makeStyles(({ transitions, zIndex }) => ({
   menuButton: {
     marginLeft: -8,
     marginRight: 8,
+  },
+  title: {
+    textTransform: 'uppercase',
+    flexGrow: 1,
+  },
+  signOutIcon: {
+    marginRight: spacing(2),
   },
 }));
 
@@ -60,17 +69,12 @@ const createGet = (layoutConfig: LayoutConfig, normal, shrink, pushed, unsqueeze
   return fromNavVariant[navVariant] || normal;
 };
 
-const DefaultHeader = ({
-  className,
-  menuIcon,
-  children,
-  toolbarProps,
-  ...props
-}: DefaultHeaderProps) => {
+const Header = ({ className, children, toolbarProps, ...props }: DefaultHeaderProps) => {
   const classes = useStyles();
   const layoutConfig = useLayoutConfig();
 
   const {
+    hasNav,
     isHeaderClipped,
     collapsedNavWidth,
     navWidth,
@@ -80,7 +84,12 @@ const DefaultHeader = ({
     setIsNavOpen,
   } = layoutConfig;
 
-  const shouldRenderMenu = navVariant !== 'permanent' && !!menuIcon;
+  const shouldRenderMenu = hasNav && navVariant !== 'permanent';
+
+  const menuIcon = {
+    inactive: <MenuIcon />,
+    active: <ChevronLeftIcon />,
+  };
 
   const getWidth = createGet(
     layoutConfig,
@@ -113,12 +122,18 @@ const DefaultHeader = ({
             {isNavOpen ? menuIcon.active : menuIcon.inactive || menuIcon.active}
           </IconButton>
         )}
-        {children}
+        <Typography variant="h6" component="h1" noWrap className={classes.title}>
+          Thot
+        </Typography>
+        <IconButton component="a" color="inherit" onClick={() => signOut()}>
+          <SignOutIcon className={classes.signOutIcon} />
+          <Typography>Déconnexion</Typography>
+        </IconButton>
       </Toolbar>
     </AppBar>
   );
 };
 
-DefaultHeader.defaultProps = defaultProps;
+Header.defaultProps = defaultProps;
 
-export default DefaultHeader;
+export default Header;

@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core';
 
 import { useLayoutConfig } from '../../services';
 
-interface DefaultFooterProps {
+interface DefaultContentProps {
   className?: string;
 }
 
@@ -12,13 +12,10 @@ const defaultProps = {
   className: null,
 };
 
-const useStyles = makeStyles(({ breakpoints, palette, spacing, transitions }) => ({
+const useStyles = makeStyles(({ transitions, spacing }) => ({
   root: {
-    borderTop: `1px solid ${palette.divider}`,
     padding: spacing(2),
-    [breakpoints.up('sm')]: {
-      padding: spacing(3),
-    },
+    flexGrow: 1,
     transition: transitions.create(['margin'], {
       easing: transitions.easing.sharp,
       duration: transitions.duration.leavingScreen,
@@ -26,7 +23,7 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing, transitions }) =>
   },
 }));
 
-const DefaultFooter = ({ className, ...props }: DefaultFooterProps) => {
+const Content = ({ className, ...props }: DefaultContentProps) => {
   const classes = useStyles();
   const layoutConfig = useLayoutConfig();
 
@@ -36,9 +33,9 @@ const DefaultFooter = ({ className, ...props }: DefaultFooterProps) => {
     isNavCollapsible,
     isNavCollapsed,
     collapsedNavWidth,
-    shouldShrinkFooter,
     isNavOpen,
     navAnchor,
+    shouldSqueezeContent,
   } = layoutConfig;
 
   const navVariantToMargin = {
@@ -46,20 +43,22 @@ const DefaultFooter = ({ className, ...props }: DefaultFooterProps) => {
     permanent: isNavCollapsible && isNavCollapsed ? collapsedNavWidth : navWidth,
   };
 
-  const marginLeft =
-    navAnchor === 'left' || shouldShrinkFooter ? navVariantToMargin[navVariant] : 0;
+  const marginLeft = navAnchor === 'left' ? navVariantToMargin[navVariant] : 0;
+
+  const width = navVariant === 'persistent' && isNavOpen && !shouldSqueezeContent ? '100%' : 'auto';
 
   return (
-    <footer
+    <main
       {...props}
       className={cx(className, classes.root)}
       style={{
         marginLeft,
+        width,
       }}
     />
   );
 };
 
-DefaultFooter.defaultProps = defaultProps;
+Content.defaultProps = defaultProps;
 
-export default DefaultFooter;
+export default Content;

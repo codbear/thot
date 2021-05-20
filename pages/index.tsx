@@ -1,5 +1,5 @@
 import { getSession } from 'next-auth/client';
-import { DefaultLayout } from '../modules/layout';
+import { HomeScreen } from '../modules/home';
 
 export const getServerSideProps = async (context) => {
   const session = await getSession(context);
@@ -21,7 +21,5 @@ export const getServerSideProps = async (context) => {
 export default function Index({ session }) {
   const { user } = session;
 
-  return (
-    <DefaultLayout />
-  );
+  return <HomeScreen />;
 }
