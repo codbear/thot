@@ -25,6 +25,9 @@ const fields = {
     name: 'firstName',
     type: 'text',
     label: 'Prénom',
+    inputProps: {
+      autocomplete: 'given-name',
+    },
     required: true,
     fullWidth: true,
     noAsterisk: true,
@@ -34,6 +37,9 @@ const fields = {
     name: 'lastName',
     type: 'text',
     label: 'Nom',
+    inputProps: {
+      autocomplete: 'family-name',
+    },
     required: true,
     fullWidth: true,
     noAsterisk: true,
@@ -43,6 +49,9 @@ const fields = {
     name: 'email',
     type: 'email',
     label: 'Email',
+    inputProps: {
+      autocomplete: 'email',
+    },
     required: true,
     fullWidth: true,
     noAsterisk: true,
@@ -52,6 +61,9 @@ const fields = {
     name: 'password',
     type: 'password',
     label: 'Mot de passe',
+    inputProps: {
+      autocomplete: 'new-password',
+    },
     required: true,
     fullWidth: true,
     noAsterisk: true,

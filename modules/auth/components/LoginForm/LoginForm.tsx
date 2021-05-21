@@ -19,6 +19,9 @@ const fields = {
     name: 'email',
     type: 'email',
     label: 'Email',
+    inputProps: {
+      autocomplete: 'username',
+    },
     required: true,
     fullWidth: true,
     noAsterisk: true,
@@ -28,6 +31,9 @@ const fields = {
     name: 'password',
     type: 'password',
     label: 'Mot de passe',
+    inputProps: {
+      autocomplete: 'current-password',
+    },
     required: true,
     fullWidth: true,
     noAsterisk: true,

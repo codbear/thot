@@ -53,7 +53,7 @@ const FormikTextField = ({
                   ...(noAsterisk ? { asterisk: classes.noAsterisk } : {}),
                 },
               }}
-              InputProps={inputProps}
+              inputProps={inputProps}
               {...field}
               {...formikProps}
               {...otherProps}
