@@ -1,5 +1,6 @@
+import { FormEvent } from 'react';
 import { signIn } from 'next-auth/client';
-import { FormikBag, FormikValues, withFormik } from 'formik';
+import { withFormik } from 'formik';
 import axios from 'axios';
 
 import { makeStyles } from '@material-ui/core';
@@ -9,7 +10,8 @@ import { FormikField, isEmail, isRequired } from '../../../form';
 import { AuthForm } from '../AuthForm';
 
 interface RegisterFormProps {
-  handleSubmit: (values: FormikValues, formikBag: FormikBag<any, any>) => void | Promise<any>;
+  handleSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  isSubmitting: boolean;
 }
 
 const useStyles = makeStyles(({ spacing }) => ({
@@ -71,11 +73,11 @@ const fields = {
   },
 };
 
-const LoginForm = ({ handleSubmit }: RegisterFormProps) => {
+const LoginForm = ({ handleSubmit, isSubmitting }: RegisterFormProps) => {
   const classes = useStyles();
 
   return (
-    <AuthForm variant="register" handleSubmit={handleSubmit}>
+    <AuthForm variant="register" handleSubmit={handleSubmit} isProcessing={isSubmitting}>
       <div className={classes.fieldsRow}>
         <FormikField key={fields.firstName.name} {...fields.firstName} />
         <FormikField key={fields.lastName.name} {...fields.lastName} />
@@ -93,7 +95,7 @@ export default withFormik({
     lastName: '',
     password: '',
   }),
-  handleSubmit: (values, { setFieldError }) => {
+  handleSubmit: (values, { setFieldError, setSubmitting }) => {
     const { email: username, firstName, lastName, password } = values;
 
     const authUrl =
@@ -124,6 +126,8 @@ export default withFormik({
         if (isEmailAlreadyInUse) {
           setFieldError('email', 'Cette adresse email est déjà utilisée.');
         }
+
+        setSubmitting(false);
       });
   },
 })(LoginForm);
