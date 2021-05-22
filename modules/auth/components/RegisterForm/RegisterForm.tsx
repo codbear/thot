@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import { makeStyles } from '@material-ui/core';
 
-import { FormikTextField, isEmail, isRequired } from '../../../form';
+import { FormikField, isEmail, isRequired } from '../../../form';
 
 import { AuthForm } from '../AuthForm';
 
@@ -77,11 +77,11 @@ const LoginForm = ({ handleSubmit }: RegisterFormProps) => {
   return (
     <AuthForm variant="register" handleSubmit={handleSubmit}>
       <div className={classes.fieldsRow}>
-        <FormikTextField key={fields.firstName.name} {...fields.firstName} />
-        <FormikTextField key={fields.lastName.name} {...fields.lastName} />
+        <FormikField key={fields.firstName.name} {...fields.firstName} />
+        <FormikField key={fields.lastName.name} {...fields.lastName} />
       </div>
-      <FormikTextField key={fields.email.name} {...fields.email} />
-      <FormikTextField key={fields.password.name} {...fields.password} />
+      <FormikField key={fields.email.name} {...fields.email} />
+      <FormikField key={fields.password.name} {...fields.password} />
     </AuthForm>
   );
 };

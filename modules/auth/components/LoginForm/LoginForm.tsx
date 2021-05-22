@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/client';
 import { FormikBag, FormikValues, withFormik } from 'formik';
 
-import { FormikTextField, isEmail, isRequired } from '../../../form';
+import { FormikField, isEmail, isRequired } from '../../../form';
 
 import { AuthForm } from '../AuthForm';
 
@@ -65,8 +65,8 @@ const LoginForm = ({ handleSubmit, setFieldValue }: LoginFormProps) => {
 
   return (
     <AuthForm variant="login" handleSubmit={handleSubmit} error={formError}>
-      <FormikTextField key={fields.email.name} {...fields.email} />
-      <FormikTextField key={fields.password.name} {...fields.password} />
+      <FormikField key={fields.email.name} {...fields.email} />
+      <FormikField key={fields.password.name} {...fields.password} />
     </AuthForm>
   );
 };
