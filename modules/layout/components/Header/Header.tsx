@@ -74,6 +74,7 @@ const Header = ({ className, children, toolbarProps, ...props }: DefaultHeaderPr
   const layoutConfig = useLayoutConfig();
 
   const {
+    layoutSource,
     hasNav,
     isHeaderClipped,
     collapsedNavWidth,
@@ -125,10 +126,12 @@ const Header = ({ className, children, toolbarProps, ...props }: DefaultHeaderPr
         <Typography variant="h6" component="h1" noWrap className={classes.title}>
           Thot
         </Typography>
-        <IconButton component="a" color="inherit" onClick={() => signOut()}>
-          <SignOutIcon className={classes.signOutIcon} />
-          <Typography>Déconnexion</Typography>
-        </IconButton>
+        {layoutSource === 'connected' && (
+          <IconButton component="a" color="inherit" onClick={() => signOut()}>
+            <SignOutIcon className={classes.signOutIcon} />
+            <Typography>Déconnexion</Typography>
+          </IconButton>
+        )}
       </Toolbar>
     </AppBar>
   );
