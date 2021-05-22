@@ -31,6 +31,7 @@ const Footer = ({ className, ...props }: DefaultFooterProps) => {
   const layoutConfig = useLayoutConfig();
 
   const {
+    hasNav,
     navVariant,
     navWidth,
     isNavCollapsible,
@@ -47,7 +48,7 @@ const Footer = ({ className, ...props }: DefaultFooterProps) => {
   };
 
   const marginLeft =
-    navAnchor === 'left' || shouldShrinkFooter ? navVariantToMargin[navVariant] : 0;
+    hasNav && (navAnchor === 'left' || shouldShrinkFooter) ? navVariantToMargin[navVariant] : 0;
 
   return (
     <footer

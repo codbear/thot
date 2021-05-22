@@ -28,6 +28,7 @@ const Content = ({ className, ...props }: DefaultContentProps) => {
   const layoutConfig = useLayoutConfig();
 
   const {
+    hasNav,
     navVariant,
     navWidth,
     isNavCollapsible,
@@ -43,7 +44,7 @@ const Content = ({ className, ...props }: DefaultContentProps) => {
     permanent: isNavCollapsible && isNavCollapsed ? collapsedNavWidth : navWidth,
   };
 
-  const marginLeft = navAnchor === 'left' ? navVariantToMargin[navVariant] : 0;
+  const marginLeft = hasNav && navAnchor === 'left' ? navVariantToMargin[navVariant] : 0;
 
   const width = navVariant === 'persistent' && isNavOpen && !shouldSqueezeContent ? '100%' : 'auto';
 
