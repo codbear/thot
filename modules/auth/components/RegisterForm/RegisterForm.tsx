@@ -1,15 +1,17 @@
+import { FormEvent } from 'react';
 import { signIn } from 'next-auth/client';
-import { FormikBag, FormikValues, withFormik } from 'formik';
+import { withFormik } from 'formik';
 import axios from 'axios';
 
 import { makeStyles } from '@material-ui/core';
 
-import { FormikTextField, isEmail, isRequired } from '../../../form';
+import { FormikField, isEmail, isRequired } from '../../../form';
 
 import { AuthForm } from '../AuthForm';
 
 interface RegisterFormProps {
-  handleSubmit: (values: FormikValues, formikBag: FormikBag<any, any>) => void | Promise<any>;
+  handleSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  isSubmitting: boolean;
 }
 
 const useStyles = makeStyles(({ spacing }) => ({
@@ -25,6 +27,9 @@ const fields = {
     name: 'firstName',
     type: 'text',
     label: 'Prénom',
+    inputProps: {
+      autocomplete: 'given-name',
+    },
     required: true,
     fullWidth: true,
     noAsterisk: true,
@@ -34,6 +39,9 @@ const fields = {
     name: 'lastName',
     type: 'text',
     label: 'Nom',
+    inputProps: {
+      autocomplete: 'family-name',
+    },
     required: true,
     fullWidth: true,
     noAsterisk: true,
@@ -43,6 +51,9 @@ const fields = {
     name: 'email',
     type: 'email',
     label: 'Email',
+    inputProps: {
+      autocomplete: 'email',
+    },
     required: true,
     fullWidth: true,
     noAsterisk: true,
@@ -52,6 +63,9 @@ const fields = {
     name: 'password',
     type: 'password',
     label: 'Mot de passe',
+    inputProps: {
+      autocomplete: 'new-password',
+    },
     required: true,
     fullWidth: true,
     noAsterisk: true,
@@ -59,17 +73,17 @@ const fields = {
   },
 };
 
-const LoginForm = ({ handleSubmit }: RegisterFormProps) => {
+const LoginForm = ({ handleSubmit, isSubmitting }: RegisterFormProps) => {
   const classes = useStyles();
 
   return (
-    <AuthForm variant="register" handleSubmit={handleSubmit}>
+    <AuthForm variant="register" handleSubmit={handleSubmit} isProcessing={isSubmitting}>
       <div className={classes.fieldsRow}>
-        <FormikTextField key={fields.firstName.name} {...fields.firstName} />
-        <FormikTextField key={fields.lastName.name} {...fields.lastName} />
+        <FormikField key={fields.firstName.name} {...fields.firstName} />
+        <FormikField key={fields.lastName.name} {...fields.lastName} />
       </div>
-      <FormikTextField key={fields.email.name} {...fields.email} />
-      <FormikTextField key={fields.password.name} {...fields.password} />
+      <FormikField key={fields.email.name} {...fields.email} />
+      <FormikField key={fields.password.name} {...fields.password} />
     </AuthForm>
   );
 };
@@ -81,7 +95,7 @@ export default withFormik({
     lastName: '',
     password: '',
   }),
-  handleSubmit: (values, { setFieldError }) => {
+  handleSubmit: (values, { setFieldError, setSubmitting }) => {
     const { email: username, firstName, lastName, password } = values;
 
     const authUrl =
@@ -112,6 +126,8 @@ export default withFormik({
         if (isEmailAlreadyInUse) {
           setFieldError('email', 'Cette adresse email est déjà utilisée.');
         }
+
+        setSubmitting(false);
       });
   },
 })(LoginForm);

@@ -1,26 +1,17 @@
 import { FormEvent, ReactElement } from 'react';
 import Link from 'next/link';
-import { FormikBag, FormikValues } from 'formik';
 
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Divider,
-  makeStyles,
-  Typography,
-} from '@material-ui/core';
+import { Card, CardActions, CardContent, Divider, makeStyles, Typography } from '@material-ui/core';
 
 import { Alert, ALERT_VARIANT } from '../../../ui';
+import { Button } from '../../../form';
 
 interface AuthFormProps {
   variant: 'login' | 'register';
   children: ReactElement | ReactElement[];
-  handleSubmit:
-    | ((event: FormEvent<HTMLFormElement>) => void)
-    | ((values: FormikValues, formikBag: FormikBag<any, any>) => void | Promise<any>);
+  handleSubmit: (event: FormEvent<HTMLFormElement>) => void;
   error?: string;
+  isProcessing: boolean;
 }
 
 const defaultProps = {
@@ -53,12 +44,12 @@ const useStyles = makeStyles(({ spacing }) => ({
   },
 }));
 
-const AuthForm = ({ variant, handleSubmit, error, children }: AuthFormProps) => {
+const AuthForm = ({ variant, handleSubmit, error, children, isProcessing }: AuthFormProps) => {
   const classes = useStyles();
 
   return (
     <Card className={classes.root}>
-      <form noValidate onSubmit={handleSubmit as (event: FormEvent<HTMLFormElement>) => void}>
+      <form noValidate onSubmit={handleSubmit}>
         <CardContent className={classes.cardContent}>
           <Typography variant="h4" component="h1" className={classes.cardTitle}>
             {variant === 'login' ? 'Connexion' : 'Inscription'}
@@ -69,6 +60,7 @@ const AuthForm = ({ variant, handleSubmit, error, children }: AuthFormProps) => 
         </CardContent>
         <CardActions className={classes.cardActions}>
           <Button
+            isProcessing={isProcessing}
             type="submit"
             variant="contained"
             color="primary"

@@ -1,17 +1,16 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/client';
-import { FormikBag, FormikValues, withFormik } from 'formik';
+import { withFormik } from 'formik';
 
-import { FormikTextField, isEmail, isRequired } from '../../../form';
+import { FormikField, isEmail, isRequired } from '../../../form';
 
 import { AuthForm } from '../AuthForm';
 
 interface LoginFormProps {
-  handleSubmit:
-    | ((event: FormEvent<HTMLFormElement>) => void)
-    | ((values: FormikValues, formikBag: FormikBag<any, any>) => void | Promise<any>);
+  handleSubmit: (event: FormEvent<HTMLFormElement>) => void;
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
+  isSubmitting: boolean;
 }
 
 const fields = {
@@ -19,6 +18,9 @@ const fields = {
     name: 'email',
     type: 'email',
     label: 'Email',
+    inputProps: {
+      autocomplete: 'username',
+    },
     required: true,
     fullWidth: true,
     noAsterisk: true,
@@ -28,6 +30,9 @@ const fields = {
     name: 'password',
     type: 'password',
     label: 'Mot de passe',
+    inputProps: {
+      autocomplete: 'current-password',
+    },
     required: true,
     fullWidth: true,
     noAsterisk: true,
@@ -44,7 +49,7 @@ const getErrorMessage = (error) => {
   return errorMessages[error] || errorMessages.default;
 };
 
-const LoginForm = ({ handleSubmit, setFieldValue }: LoginFormProps) => {
+const LoginForm = ({ handleSubmit, setFieldValue, isSubmitting }: LoginFormProps) => {
   const router = useRouter();
   const [formError, setFormError] = useState(null);
 
@@ -58,9 +63,14 @@ const LoginForm = ({ handleSubmit, setFieldValue }: LoginFormProps) => {
   }, [router, setFieldValue]);
 
   return (
-    <AuthForm variant="login" handleSubmit={handleSubmit} error={formError}>
-      <FormikTextField key={fields.email.name} {...fields.email} />
-      <FormikTextField key={fields.password.name} {...fields.password} />
+    <AuthForm
+      variant="login"
+      handleSubmit={handleSubmit}
+      error={formError}
+      isProcessing={isSubmitting}
+    >
+      <FormikField key={fields.email.name} {...fields.email} />
+      <FormikField key={fields.password.name} {...fields.password} />
     </AuthForm>
   );
 };

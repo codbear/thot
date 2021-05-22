@@ -1,44 +1,33 @@
 import { ReactElement, useState } from 'react';
-import { signOut } from 'next-auth/client';
 
-import { IconButton, makeStyles, Typography } from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import SignOutIcon from '@material-ui/icons/PowerSettingsNew';
+import { makeStyles } from '@material-ui/core';
 
 import { useWidth } from '../../../ui';
 
-import { LAYOUT_CONFIG, LayoutConfig } from '../../constants';
+import { LayoutConfig } from '../../constants';
 import { LayoutContext } from '../../services';
-import { MainNav } from '../MainNav';
-import Header from './DefaultHeader';
-import Nav from './DefaultNav';
-import Content from './DefaultContent';
-import Footer from './DefaultFooter';
+
+import Header from '../Header/Header';
+import Nav from '../Nav/Nav';
+import Content from '../Content/Content';
+import Footer from '../Footer/Footer';
 
 interface DefaultLayoutProps {
   children?: ReactElement;
+  layoutConfig: LayoutConfig;
 }
 
 const defaultProps = {
   children: null,
 };
 
-const useStyles = makeStyles(({ spacing }) => ({
+const useStyles = makeStyles({
   root: {
     display: 'flex',
     flexDirection: 'column',
     minHeight: '100vh',
   },
-  title: {
-    textTransform: 'uppercase',
-    flexGrow: 1,
-  },
-  signOutIcon: {
-    marginRight: spacing(2),
-  },
-}));
+});
 
 export const getValueFromScreenWidth = (property, screenWidth) => {
   if (typeof property !== 'object') {
@@ -48,13 +37,16 @@ export const getValueFromScreenWidth = (property, screenWidth) => {
   return property[screenWidth] || property.default;
 };
 
-const DefaultLayout = ({ children }: DefaultLayoutProps) => {
+const Layout = ({ children, layoutConfig }: DefaultLayoutProps) => {
   const classes = useStyles();
   const screenWidth = useWidth();
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
 
   const {
+    hasHeader,
+    hasNav,
+    hasFooter,
     navAnchor,
     navVariant,
     navWidth,
@@ -64,9 +56,10 @@ const DefaultLayout = ({ children }: DefaultLayoutProps) => {
     headerPosition,
     shouldSqueezeContent,
     shouldShrinkFooter,
-  } = LAYOUT_CONFIG;
+  } = layoutConfig;
 
   const value: LayoutConfig = {
+    ...layoutConfig,
     navAnchor: getValueFromScreenWidth(navAnchor, screenWidth),
     navVariant: getValueFromScreenWidth(navVariant, screenWidth),
     navWidth: getValueFromScreenWidth(navWidth, screenWidth),
@@ -85,35 +78,18 @@ const DefaultLayout = ({ children }: DefaultLayoutProps) => {
   return (
     <LayoutContext.Provider value={value}>
       <div className={classes.root}>
-        <Header
-          menuIcon={{
-            inactive: <MenuIcon />,
-            active: <ChevronLeftIcon />,
-          }}
-        >
-          <Typography variant="h6" component="h1" noWrap className={classes.title}>
-            Thot
-          </Typography>
-          <IconButton component="a" color="inherit" onClick={() => signOut()}>
-            <SignOutIcon className={classes.signOutIcon} />
-            <Typography>Déconnexion</Typography>
-          </IconButton>
-        </Header>
-        <Nav
-          collapsedIcon={{
-            inactive: <ChevronLeftIcon />,
-            active: <ChevronRightIcon />,
-          }}
-        >
-          <MainNav />
-        </Nav>
+        {hasHeader && <Header />}
+
+        {hasNav && <Nav />}
+
         <Content>{children}</Content>
-        <Footer />
+
+        {hasFooter && <Footer />}
       </div>
     </LayoutContext.Provider>
   );
 };
 
-DefaultLayout.defaultProps = defaultProps;
+Layout.defaultProps = defaultProps;
 
-export default DefaultLayout;
+export default Layout;

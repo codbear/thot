@@ -1,12 +1,18 @@
 {
   "name": "thot",
-  "version": "2.2.1-alpha",
+  "author": "Codbear <douglas.meunier@codbear.com> (https://codbear.com)",
+  "version": "2.0.0-alpha",
+  "license": "gpl-3.0",
+  "description": "Library Management System",
+  "repository": "github:codbear/Thot",
+  "bugs": "https://github.com/codbear/Thot/issues",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ./ --ext js,jsx,ts,tsx"
+    "lint": "eslint ./ --ext js,jsx,ts,tsx",
+    "env": "vercel env pull"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.*",

@@ -1,2 +1,2 @@
 // eslint-disable-next-line import/prefer-default-export
-export { withLayout } from './hoc';
+export { default as withLayout } from './withLayout';
